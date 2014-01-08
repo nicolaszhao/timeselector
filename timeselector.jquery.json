@@ -1,0 +1,27 @@
+{
+  "name": "timeselector",
+  "title": "Timeselector",
+  "description": "A simple jQuery plugin for time selection in form.",
+  "version": "0.1.0",
+  "homepage": "https://github.com/nicolaszhao/timeselector",
+  "author": {
+    "name": "Nicolas Zhao",
+    "email": "nicolas-zhao@live.com",
+    "url": "https://github.com/nicolaszhao"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:nicolaszhao/timeselector.git"
+  },
+  "bugs": "https://github.com/nicolaszhao/timeselector/issues",
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/nicolaszhao/timeselector/blob/master/LICENSE-MIT"
+    }
+  ],
+  "dependencies": {
+    "jquery": "1.10.2"
+  },
+  "keywords": ["timepicker", "timeselector", "time", "input", "ui"]
+}
