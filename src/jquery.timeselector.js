@@ -360,6 +360,3 @@
 	$.fn.timeselector.timer = new Timeselector();
 
 }(jQuery));
-
-
-
