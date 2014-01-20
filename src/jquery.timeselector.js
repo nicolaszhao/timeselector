@@ -36,12 +36,11 @@
 					'</div>';
 		},
 		
-		_setTime: function(type, step) {
-			var inst = this._inst,
-				date = inst.date;
+		_setTime: function(inst, step) {
+			var date = inst.date;
 			
-			if (type) {
-				date.setTime(+date + (1000 * 60 * (type === 'hour' ? 60 : step)));
+			if (step) {
+				date.setTime(+date + (1000 * 60 * step));
 			}
 			
 			inst.input.val(this._format(date, inst.options.hours12));
@@ -117,18 +116,18 @@
 			return $(target).data('timeselector');
 		},
 		
-		_selectTime: function(type, steps, delay) {
+		_selectTime: function(inst, type, steps, delay) {
 			delay = delay || 500;
 			
 			var that = this;
 			
 			clearTimeout(this._timer);
 			this._timer = setTimeout(function() {
-				that._selectTime(type, steps, 50);
+				that._selectTime(inst, type, steps, 50);
 			}, delay);
 			
-			this._setTime(type, steps * this._inst.options.step);
-			this._update(this._inst);
+			this._setTime(inst, type === 'hour' ? steps * 60 : steps * inst.options.step);
+			this._update(inst);
 		},
 		
 		_stop: function() {
@@ -136,24 +135,24 @@
 		},
 		
 		_doKeyDown: function(event) {
-			if (this._showing) {
-				switch (event.which) {
-					case 27: 
-						this._hide();
-						break;
-					case 38:
-						this._selectTime('minute', 1);
-						break;
-					case 40:
-						this._selectTime('minute', -1);
-						break;
-					case 33:
-						this._selectTime('hour', 1);
-						break;
-					case 34:
-						this._selectTime('hour', -1);
-						break;
-				}
+			var inst = this._getInst(event.target);
+			
+			switch (event.which) {
+				case 27: 
+					this._hide();
+					break;
+				case 38:
+					this._selectTime(inst, 'minute', 1);
+					break;
+				case 40:
+					this._selectTime(inst, 'minute', -1);
+					break;
+				case 33:
+					this._selectTime(inst, 'hour', 1);
+					break;
+				case 34:
+					this._selectTime(inst, 'hour', -1);
+					break;
 			}
 		},
 		
@@ -254,22 +253,12 @@
 			return 0;
 		},
 		
-		option: function(target, options) {
-			var inst = this._getInst(target);
-			
-			if (inst) {
-				if (this._inst === inst) {
-					this._hide();
-				}
-				
-				$.extend(inst.options, options);
-				this._setTime();
-				this._update(inst);
-			}
-		},
-		
-		attach: function(target, options) {
+		_attach: function(target, options) {
 			var inst;
+			
+			if (this._getInst(target)) {
+				return;
+			}
 			
 			if (!target.id) {
 				this.uuid += 1;
@@ -282,15 +271,19 @@
 				div: this._$div,
 				options: $.extend({}, options)
 			};
+			this._setTimeFromField(inst);
+			if (this._match(target.value)) {
+				this._setTime(inst);
+			}
 			
 			$(target).data('timeselector', inst)
-				.on('keydown', $.proxy(this._doKeyDown, this))
-				.on('keyup', $.proxy(this._doKeyUp, this))
-				.on('focus', $.proxy(this._show, this))
-				.on('blur', $.proxy(this._stop, this));
+				.on('keydown.timeselector', $.proxy(this._doKeyDown, this))
+				.on('keyup.timeselector', $.proxy(this._doKeyUp, this))
+				.on('focus.timeselector', $.proxy(this._show, this))
+				.on('blur.timeselector', $.proxy(this._stop, this));
 		},
 		
-		create: function() {
+		_create: function() {
 			var that = this;
 
 			this._$div = $(this._generateHtml()).appendTo('body').hide()
@@ -302,7 +295,7 @@
 					}
 					
 					$button.addClass('timeselector-state-active');
-					that._selectTime($button.parent('.timeselector-item').data('type'), $button.hasClass('timeselector-up') ? 1 : -1);
+					that._selectTime(that._inst, $button.parent('.timeselector-item').data('type'), $button.hasClass('timeselector-up') ? 1 : -1);
 					event.preventDefault();
 				})
 				.on('mouseup.timeselector', '.timeselector-button', function() {
@@ -313,16 +306,38 @@
 					var $button = $(this);
 					
 					if ($button.hasClass('timeselector-state-active')) {
-						that._selectTime($button.parent('.timeselector-item').data('type'), $button.hasClass('timeselector-up') ? 1 : -1);
+						that._selectTime(that._inst, $button.parent('.timeselector-item').data('type'), $button.hasClass('timeselector-up') ? 1 : -1);
 					}
 				})
 				.on('mouseleave.timeselector', '.timeselector-button', $.proxy(this._stop, this))
 				.on('click.timeselector', '.timeselector-value', function() {
-					that._setTime();
+					that._setTime(that._inst);
 					that._hide();
 				});
 				
-			$(document).on('mousedown', $.proxy(this._checkExternalClick, this));
+			$(document).on('mousedown.timeselector', $.proxy(this._checkExternalClick, this));
+		},
+		
+		option: function(target, options) {
+			var inst = this._getInst(target);
+			
+			if (inst) {
+				if (this._inst === inst) {
+					this._hide();
+				}
+				
+				$.extend(inst.options, options);
+				this._setTime(inst);
+				this._update(inst);
+			}
+		},
+		
+		refresh: function(target) {
+			var inst = this._getInst(target);
+			if (inst) {
+				this._setTimeFromField(inst);
+				this._update(inst);
+			}
 		}
 	};
 
@@ -330,7 +345,7 @@
 		var args = Array.prototype.slice.call(arguments, 1);
 		
 		if (!$.fn.timeselector.timer.initialized) {
-			$.fn.timeselector.timer.create();
+			$.fn.timeselector.timer._create();
 			$.fn.timeselector.timer.initialized = true;
 		}
 		
@@ -345,7 +360,7 @@
 		} else {
 			options = $.extend({}, $.fn.timeselector.defaults, options);
 			this.each(function() {
-				$.fn.timeselector.timer.attach(this, options);
+				$.fn.timeselector.timer._attach(this, options);
 			});
 		}
 		
@@ -354,7 +369,7 @@
 	
 	$.fn.timeselector.defaults = {
 		hours12: true,
-		step: 2
+		step: 1
 	};
 	
 	$.fn.timeselector.timer = new Timeselector();
