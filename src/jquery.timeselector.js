@@ -338,6 +338,9 @@
 			if (inst) {
 				this._setTimeFromField(inst);
 				this._update(inst);
+				if (this._match(target.value)) {
+					this._setTime(inst);
+				}
 			}
 		}
 	};
