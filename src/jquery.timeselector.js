@@ -277,6 +277,7 @@
 			}
 			
 			$(target).data('timeselector', inst)
+				.attr('autocomplete', 'off')
 				.on('keydown.timeselector', $.proxy(this._doKeyDown, this))
 				.on('keyup.timeselector', $.proxy(this._doKeyUp, this))
 				.on('focus.timeselector', $.proxy(this._show, this))
@@ -302,7 +303,7 @@
 					$(this).removeClass('timeselector-state-active');
 					that._stop();
 				})
-				.on('mouseenter.timeselector', '.timeselector-button', function(event) {
+				.on('mouseenter.timeselector', '.timeselector-button', function() {
 					var $button = $(this);
 					
 					if ($button.hasClass('timeselector-state-active')) {
