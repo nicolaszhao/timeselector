@@ -34,6 +34,15 @@ module.exports = function(grunt) {
         dest: 'dist/jquery.<%= pkg.name %>.min.js'
       },
     },
+    cssmin: {
+      options: {
+        banner: '<%= banner%>'
+      },
+      dist: {
+        src: 'src/theme/jquery.<%= pkg.name %>.css',
+        dest: 'dist/theme/jquery.<%= pkg.name %>.min.css'
+      }
+    },
     qunit: {
       files: ['test/**/*.html']
     },
@@ -77,11 +86,12 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-contrib-qunit');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-watch');
 
   // Default task.
-  grunt.registerTask('default', ['jshint', 'qunit', 'clean', 'concat', 'uglify']);
+  grunt.registerTask('default', ['jshint', 'qunit', 'clean', 'concat', 'uglify', 'cssmin']);
 
 };
