@@ -2,7 +2,7 @@
   "name": "timeselector",
   "title": "Timeselector",
   "description": "A simple jQuery plugin for time selection in form.",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "homepage": "https://github.com/nicolaszhao/timeselector",
   "author": {
     "name": "Nicolas Zhao",
