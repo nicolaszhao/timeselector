@@ -42,20 +42,20 @@ Set one or more options for the timeselector.
 
 ***
 
-**refresh()**
+**refresh()**   
 Returns: jQuery   
 When the input value is set manually, need to call this method to manually update the timeselector and input value if the value is valid.
 
 **Code example:**
 	
-	$('[name="time"]').val('13:00').timeselector('refresh'); // input value will update to 01:00 PM
+	$('[name="time"]').val('13:00').timeselector('refresh'); // input value will update to '01:00 PM'
 
 ## Keyboard interaction
-* ESCAPE: Close the timeselector without selection.
-* UP: Increment the minute by one step.
-* DOWN: Decrement the minute by one step.
-* PAGE UP: Increment one hour.
-* PAGE DOWN: Decrement one hour.
+* **UP**: Increment the minute by one step.
+* **DOWN**: Decrement the minute by one step.
+* **PAGE UP**: Increment one hour.
+* **PAGE DOWN**: Decrement one hour.
+* **ESCAPE**: Close the timeselector without selection.
 	
 ## Theming
 If timeselector specific styling is needed, the following CSS class names can be used:
