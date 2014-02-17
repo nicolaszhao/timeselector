@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:nicolaszhao/timeselector.git"
+    "url": "https://github.com/nicolaszhao/timeselector.git"
   },
   "bugs": "https://github.com/nicolaszhao/timeselector/issues",
   "licenses": [
