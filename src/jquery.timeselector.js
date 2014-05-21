@@ -228,7 +228,7 @@
 			var $target = $(event.target),
 				inst = this._getInst($target[0]);
 				
-			if ((!inst && !$target.closest('#timeselector-div').length && this._showing) || 
+			if ((!inst && !$target.closest('.timeselector').length && this._showing) || 
 					(inst && this._inst !== inst)) {
 				this._hide();
 			}	
