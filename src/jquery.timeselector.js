@@ -37,12 +37,27 @@
 		},
 		
 		_setTime: function(inst, step) {
-			var date = inst.date;
+      var date = inst.date,
+        min = inst.options.min, 
+        max = inst.options.max,
+        value, limit;
 			
 			if (step) {
-				date.setTime(+date + (1000 * 60 * step));
+        value = +date + (1000 * 60 * step);
+        min = this._match(min) && this._parseTime(min);
+        max = this._match(max) && this._parseTime(max)
+        
+        if (min && step < 0 && value < min) {
+          value = min;
+        }
+
+        if (max && step > 0 && value > max) {
+          value = max;
+        }
+
+        date.setTime(+value);
 			}
-			
+      
 			inst.input.val(this._format(date, inst.options.hours12));
 			inst.lastValue = inst.input.val();
 		},
@@ -50,15 +65,21 @@
 		_setTimeFromField: function(inst) {
 			if (inst.input.val() === inst.lastValue) {
 				return;
-			}
+      }
+      
 			inst.lastValue = inst.input.val();
-			
-			var date = new Date(),
+			inst.date = this._parseTime(inst.lastValue);
+    },
+    
+    _parseTime: function(value) {
+      var date = new Date(),
 				matches, hour;
 			
-			matches = this._match(inst.lastValue);
+      matches = this._match(value);
+      
 			if (matches) {
-				hour = parseInt(matches[0], 10);
+        hour = parseInt(matches[0], 10);
+        
 				if (matches[2]) {
 					if (matches[2].toLowerCase() === 'am' && hour === 12) {
 						hour = 0;
@@ -70,10 +91,14 @@
 				date.setMinutes(parseInt(matches[1], 10));
 			}
 			
-			inst.date = date;
-		},
+			return date;
+    },
 		
 		_match: function(time) {
+      if (!time) {
+        return null;
+      }
+
 			var rtime = /^((?:1[012]|0[1-9])|(?:[01][0-9]|2[0-3])):([0-5][0-9])(?:\s(am|pm))?$/i,
 				matches = rtime.exec(time);
 			
@@ -373,7 +398,9 @@
 	
 	$.fn.timeselector.defaults = {
 		hours12: true,
-		step: 1
+    step: 1,
+    min: '',
+    max: ''
 	};
 	
 	$.fn.timeselector.timer = new Timeselector();
