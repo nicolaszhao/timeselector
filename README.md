@@ -2,7 +2,7 @@
 
 A simple jQuery plugin for time selection in form.
 
-**Current version:** [1.0.0](https://github.com/nicolaszhao/timeselector/archive/v1.0.0.tar.gz)
+**Current version:** [2.0.0](https://github.com/nicolaszhao/timeselector/archive/v2.0.0.tar.gz)
 
 ## Usage
 Include jQuery and the plugin on your page. Then select a input element and call the timeselector method on DOM ready.
