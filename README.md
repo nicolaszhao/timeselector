@@ -15,7 +15,7 @@ Include jQuery and the plugin on your page. Then select a input element and call
 		});
 	</script>
 	<input type="text" name="time" />
-	
+
 ## Options
 **hours12** (default: true)   
 Type: Boolean   
@@ -27,17 +27,34 @@ Define whether or not to show AM/PM with selected time.
 Type: Number   
 The step size to adjust minutes when click the timeselector buttons or press the UP/DOWN KEY on the keyboard.
 
+***
+
+**min** (default: '')
+
+Type: String
+
+The maximum time limit that can be set
+
+***
+
+**max** (default: '')
+
+Type: String
+
+The minimum time limit that can be set
+
 ## Methods
 **option( options )**  
 Returns: jQuery   
 Set one or more options for the timeselector.
-	
+​	
 * **options**   
 	Type: Object   
 	A map of option-value pairs to set.
 	
+
 **Code example:**
-	
+​	
 	$('[name="time"]').timeselector('option', {hours12: false});
 
 ***
@@ -47,7 +64,7 @@ Returns: jQuery
 When the input value is set manually, need to call this method to manually update the timeselector and input value if the value is valid.
 
 **Code example:**
-	
+​	
 	$('[name="time"]').val('13:00').timeselector('refresh'); // input value will update to '01:00 PM'
 
 ## Keyboard interaction
